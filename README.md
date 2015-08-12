@@ -7,13 +7,16 @@ Translation Filters for FatFree Framework (Supports Yandex and Microsoft Transla
 
 ### Installation
 
-Copy the Translator folder to an auto loaded path eg `lib`or path from (`$f3->set('AUTOLOAD',<paths>);`)
+Copy the `<translator>` folder to an auto-loaded path eg `lib` or path from (`$f3->set('AUTOLOAD',<paths>);`)
+
+Set config for either Yandex or Microsoft
 
 ```ini
 [TRANSLATE]
 YANDEX.APIKEY = <YOUR YANDEX API KEY>
 MICROSOFT.CLIENTID = <YOUR MICROSOFT CLIENT ID>
 MICROSOFT.CLIENTSECRET = <YOUR MICROSOFT CLIENT SECRET>
+# ONERROR = 
 ```
 
 Get Yandex API KEY [HERE](https://tech.yandex.com/keys/?service=trnsl).
@@ -27,7 +30,7 @@ A guide to setting up Microsoft translator  [HERE](http://blogs.msdn.com/b/trans
 $f3->set('TRANSLATE.ONERROR',function($code,$message){
     // var_dump($code, $message); //Handle your errors
 });
-$f3->set('TRANSLATE.LANG','ru'); // Default Language to translate to, can be copied from $_GET['lang'] or $_SESSION[]
+$f3->set('TRANSLATE.LANG','ru'); // Default Language to translate to, can be gotten from $_GET[] or $_SESSION[]
 \Template::instance()->filter('translate','\Translator\Microsoft::instance()->translate');
 //\Template::instance()->filter('translate','\Translator\Yandex::instance()->translate'); //Choose one.
 ```
@@ -37,9 +40,9 @@ Now you can use `translate` filter in templates.
 ```
 Outputs
 ```html
-<strong>Информации о книге:</strong>
+<strong>Информации о книге</strong>
 ```
-You dont need to specify the `TRANSLATE.LANG` parameter: EG to translate to Spanish
+You dont need to specify the `TRANSLATE.LANG` parameter: E.g. to translate to Spanish
 ```html
 <p><strong>{{ @var, "es" | translate }}</strong></p>
 ```
