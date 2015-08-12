@@ -45,7 +45,7 @@ class Microsoft extends \Prefab
         $objResponse = json_decode($response['body']);
         if (\Base::instance()->get('CACHE')) {
             $cache = \Cache::instance();
-            $cache->set('translate.microsoft.token', $objResponse->access_token);
+            $cache->set('translate.microsoft.token', $objResponse->access_token,5);
         }
         return $objResponse->access_token;
 
@@ -70,7 +70,7 @@ class Microsoft extends \Prefab
         $params = "?text=" . urlencode($val) . "&to=" . $lang . "&from=" . $$__lang[1];
         $url = $this->endpoint . $params;
 
-        $authHeader = "Authorization: Bearer " . $this->getTokens();
+        $authHeader = "Authorization: Bearer " . $this->getTokens(true);
         $opts =
             array(
                 'header' => array($authHeader, "Content-Type: text/xml"),
@@ -78,12 +78,10 @@ class Microsoft extends \Prefab
             );
         $response = $this->web->request($url, $opts);
         $xmlObj = simplexml_load_string($response['body']);
-
         foreach ((array)$xmlObj[0] as $v) {
             $translatedStr = $v;
         }
-
-        if ($translatedStr) {
+        if ((string) $translatedStr) {
             if ($fw->get('CACHE')) {
                 $cache = \Cache::instance();
                 $cache->set(md5('translate.microsoft.' . $lang_code . '.' . $val), $translatedStr);
@@ -93,7 +91,8 @@ class Microsoft extends \Prefab
             $error_handler = $fw->get('TRANSLATE.ONERROR');
             if (!empty($error_handler))
                 $this->getTokens(true); //Renew Token
-            $fw->call($error_handler, array(401, 'Error Occurred')); //TO-DO Better Error Handling
+            $e = (array)$xmlObj->body->p;
+            $fw->call($error_handler, array($e[3], $e[2]));
         }
         return $val; //Fallback
 
