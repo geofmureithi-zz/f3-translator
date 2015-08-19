@@ -52,5 +52,7 @@ Language codes are different for Yandex and Microsoft
 * [Microsoft Codes](https://msdn.microsoft.com/en-us/library/hh456380.aspx)
 * [Yandex Codes] (https://tech.yandex.com/translate/doc/dg/concepts/langs-docpage/)
 
+Leave a comment on this [Google Forum Post] (https://groups.google.com/forum/#!topic/f3-framework/-z0m1pyWSgI)
+
 ### To-Do
 *  Google Translate API
